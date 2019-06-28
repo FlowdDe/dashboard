@@ -303,20 +303,21 @@ define(['require',
             var selector = getDomElementIdentifier('widgetContent');
             $('.js-widget').find(selector).each(function() {
                 _bootWidget(this);
-                updateWidgetContent($(this));
             });
         }
 
         function _bootWidget(widgetElement) {
             var attribute= 'data-boot';
-            var moduleName = $(widgetElement).attr(attribute);
+            var $widgetElement = $(widgetElement);
+            var moduleName = $widgetElement.attr(attribute);
             if (!moduleName) {
                 return;
             }
             require([moduleName], function(module) {
                 _dashboardManagerApp.assert('function' === $.type(module.bootstrapWidget), 'The widget module "' + moduleName + '" does not implement the method "bootstrapWidget"', 1509374171);
                 module.bootstrapWidget(widgetElement, _dashboardManagerApp);
-                $(widgetElement).removeAttr(attribute);
+                $widgetElement.removeAttr(attribute);
+                updateWidgetContent($widgetElement);
             });
         }
 
@@ -364,8 +365,8 @@ define(['require',
         /**
          * @public
          *
-         * @param object dashboardManagerApp
          * @return void
+         * @param dashboardManagerApp
          */
         function bootstrap(dashboardManagerApp) {
             _dashboardManagerApp = dashboardManagerApp;
