@@ -1,3 +1,5 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:core="http://typo3.org/ns/Pixelant/Dashboard/ViewHelpers" data-namespace-typo3-fluid="true">
+
 <f:if condition="{actions -> f:count()} > 0">
   <f:then>
     <dl class="t3-overview-list action-widget">
@@ -8,8 +10,8 @@
             <core:icon identifier="actions-view-table-expand" />{action.title}
           </a>
           </f:spaceless>
-				</dt>
-				<dd>{action.description}</dd>
+        </dt>
+          <dd>{action.description}</dd>
       </f:for>
   	</dl>
   </f:then>
@@ -30,3 +32,4 @@
     </div>
   </f:else>
 </f:if>
+</html>

@@ -20,6 +20,12 @@ namespace Pixelant\Dashboard\ViewHelpers\Be\DashboardWidget;
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
+
+use Pixelant\Dashboard\Domain\Model\Widget;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
+
 /**
  * View helper which renders a record list as known from the TYPO3 list module
  * Note: This feature is experimental!
@@ -46,17 +52,31 @@ namespace Pixelant\Dashboard\ViewHelpers\Be\DashboardWidget;
  */
 class EditOnClickViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper
 {
+    use CompileWithRenderStatic;
+
+    public function initializeArguments(): void
+    {
+        parent::initializeArguments();
+        $this->registerArgument(
+            'widget',
+            Widget::class,
+            'widget',
+            true
+        );
+    }
+
     /**
      * Renders a record list as known from the TYPO3 list module
      * Note: This feature is experimental!
      *
-     * @param \Pixelant\Dashboard\Domain\Model\Widget $widget
-     * @return string the rendered content
+     * @param array $arguments
+     * @param \Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
      * @see \TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList
      */
-    public function render(\Pixelant\Dashboard\Domain\Model\Widget $widget)
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
     {
-        $editOnClick = \TYPO3\CMS\Backend\Utility\BackendUtility::editOnClick('&edit[tx_dashboard_domain_model_widget][' . $widget->getUid() . ']=edit');
-        return $editOnClick;
+        return BackendUtility::editOnClick('&edit[tx_dashboard_domain_model_widget][' . $arguments['widget']->getUid() . ']=edit');
     }
 }

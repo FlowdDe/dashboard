@@ -22,19 +22,28 @@ namespace Pixelant\Dashboard\ViewHelpers\Be\DashboardWidget;
  *                                                                        */
 
 use Pixelant\Dashboard\Domain\Model\Widget;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class IconViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper
 {
-    /**
-     * Returns widget icon name, either defined one or default
-     *
-     * @param Widget $widget
-     * @return string
-     */
-    public function render(Widget $widget)
+    use CompileWithRenderStatic;
+
+    public function initializeArguments(): void
+    {
+        parent::initializeArguments();
+        $this->registerArgument(
+            'widget',
+            Widget::class,
+            'widget',
+            true
+        );
+    }
+
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
     {
         $defaultIcon = 'dashboard-widget-default';
-        $widgetSettings = $widget->getSettings();
+        $widgetSettings = $arguments['widget']->getSettings();
         return $widgetSettings['icon'] ?? $defaultIcon;
     }
 }
